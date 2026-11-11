@@ -1,0 +1,11 @@
+import { Router } from 'express';
+import { db } from '../config/db.js';
+import { opportunityDTO } from '../utils/http.js';
+import { listOpportunities, publishedOpportunity } from '../services/opportunities.js';
+import { opportunityStatistics } from '../services/statistics.js';
+export const opportunityRoutes = Router();
+opportunityRoutes.get('/', async (req, res) => res.json(await listOpportunities(req.query,false,req.locale)));
+opportunityRoutes.get('/stats', async (req, res) => res.json({ data: await opportunityStatistics({ status: 'PUBLISHED' }) }));
+opportunityRoutes.get('/:id', async (req, res) => res.json({ data: opportunityDTO(await publishedOpportunity(req.params.id),req.locale) }));
+export const categoryRoutes = Router();
+categoryRoutes.get('/', async (req, res) => res.json({ data: await db.category.findMany({ orderBy: { name: 'asc' } }) }));

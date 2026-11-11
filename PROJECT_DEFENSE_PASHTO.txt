@@ -1,0 +1,281 @@
+د کاریاب افغانستان پروژې د دفاع لارښود
+KaarYab Afghanistan — د تخنیکي پوښتنو او ځوابونو تمرین
+د چمتو کولو نېټه: ۲۰۲۶-۱۱-۰۳
+
+دا لارښود د پروژې د موجوده کوډ د کتنې پر بنسټ دی. د کوډ کتنه د اجرايي ازموینې بدیل نه دی. موجود امکانات او راتلونکي پلانونه په دفاع کې جلا بیان کړه.
+
+۱. د پروژې لنډه معرفي
+پوښتنه: پروژه دې څه ده، کومه ستونزه حل کوي او څوک ترې ګټه اخلي؟
+ځواب: زما د پروژې نوم کاریاب افغانستان دی. موخه یې دا ده چې افغان ځوانان، محصلین او کار غوښتونکي د کار، بورسونو، انټرنشیپونو او زده‌کړو فرصتونه په یوه ځای کې پیدا کړي. دا معلومات عموماً په بېلابېلو وېبپاڼو او ټولنیزو شبکو کې خپاره وي. پروژه د فرصتونو لټون، فلټر، خوندي کول او د CV جوړولو امکانات وړاندې کوي. په اوسني سیستم کې نمونه‌يي معلومات کارول شوي دي.
+
+۲. کارول شوې ټکنالوژۍ
+پوښتنه: پروژه په څه جوړه شوې ده؟
+ځواب: پروژه په JavaScript جوړه شوې ده. Next.js د پاڼو جوړښت او routing اداره کوي، React د کاروونکي انټرفېس او state اداره کوي، او Tailwind CSS د ډیزاین لپاره کارول شوی دی.
+
+د package.json له مخې:
+• Next.js 16.2.10: د اپلیکیشن چوکاټ او App Router.
+• React 19.2.4: components او state.
+• Tailwind CSS 4: رنګونه، layout او responsive ډیزاین.
+• React Hook Form: د فورمونو اداره.
+• Zod: د داخل شوو معلوماتو validation.
+• Context API: د components ترمنځ د ګډ state شریکول.
+• Recharts: د Dashboard چارټونه.
+• @react-pdf/renderer: د CV لپاره د PDF جوړول.
+• Lucide React: icons.
+
+په README کې ځینې نسخې زړې دي؛ د اعلان شوو نسخو لپاره package.json ته مراجعه وکړه.
+
+۳. ماډل او architecture
+پوښتنه: کوم ماډل دې کارولی دی؟
+ځواب د پوښتنې له مطلب سره تړاو لري:
+• Architecture: پروژه component-based ده او Next.js App Router کاروي.
+• Data model: فرصتونه د JavaScript objects په بڼه په یوه array کې ساتل کېږي.
+• AI model: په موجوده پروژه کې د مصنوعي ځیرکتیا ماډل نشته.
+• Development model: Agile یا Waterfall یوازې له کوډه نه شي ثابتېدای. د خپل واقعي کاري بهیر له مخې یې بیان کړه.
+
+د دفاع نمونه: ما Navbar، Footer او OpportunityCard جلا components جوړ کړي دي، څو بیا وکارول شي او د کوډ ساتنه اسانه وي.
+
+۴. د معلوماتو جوړښت
+هر فرصت دا fields لري:
+id: د فرصت پېژندونکی.
+title: عنوان.
+organization: اداره.
+category: کټګوري، لکه Job یا Scholarship.
+type: Remote، On-site یا Hybrid.
+location: موقعیت.
+deadline: وروستۍ نېټه.
+applyLink: د غوښتنلیک لینک.
+description: تشریح.
+requirements: د شرایطو array.
+tags: د اړوندو کلیمو array.
+
+سرچینه: data/opportunities.js
+یادونه: id د ځانګړي پېژندونکي په توګه کارول کېږي، خو د نوي فرصت د جوړولو اوسنی کوډ id نه تولیدوي. دا یوه موجوده نیمګړتیا ده.
+
+۵. Database او Backend
+پوښتنه: کوم database دې کارولی دی؟
+ځواب: په اوسني prototype کې مرکزي database او د معلوماتو لپاره جلا backend API نه دي جوړ شوي. لومړني معلومات له JavaScript فایل څخه راځي او محلي بدلونونه په localStorage کې ساتل کېږي.
+
+Next.js د server-side امکانات لري، خو یوازې د Next.js استعمال دا نه ثابتوي چې database، authentication یا backend API هم جوړ شوی دی.
+
+۶. localStorage څه شی دی؟
+localStorage د کاروونکي په براوزر کې د معلوماتو د ساتلو وسیله ده. معلومات د key او value په بڼه ساتي. په دې پروژه کې arrays او objects لومړی په JSON متن بدلېږي.
+
+د ساتلو نمونه:
+localStorage.setItem("kaaryab_saved", JSON.stringify(updated));
+
+تشریح:
+• setItem معلومات ذخیره کوي.
+• kaaryab_saved د ذخیرې key دی.
+• updated د خوندي شوو فرصتونو نوی لېست دی.
+• JSON.stringify لېست په متن بدلوي.
+
+د لوستلو ساده نمونه:
+const storedSaved = localStorage.getItem("kaaryab_saved");
+if (storedSaved) {
+  const savedItems = JSON.parse(storedSaved);
+}
+
+getItem ذخیره شوی متن رااخلي. JSON.parse یې بېرته د JavaScript معلوماتو ته اړوي. په اصلي کوډ کې د خراب JSON لپاره try/catch هم کارول شوی دی.
+
+مهم: JSON.stringify encryption نه دی؛ یوازې د معلوماتو بڼه بدلوي.
+
+۷. localStorage ولې کارول شوی دی؟
+د دفاع ځواب: ما localStorage د دې لپاره کارولی چې خوندي شوي فرصتونه او محلي بدلونونه له refresh وروسته هم پاتې شي. کله چې اپلیکیشن بېرته پرانیستل شي، معلومات ترې لولم او React state ته یې ورکوم.
+
+محدودیتونه:
+• معلومات په هماغه براوزر او د هماغه origin لپاره ساتل کېږي. Origin د protocol، hostname او port مجموعه ده.
+• بل موبایل یا بل براوزر ته په خپله نه انتقالېږي.
+• د سایټ د ذخیرې په پاکولو سره معلومات له منځه ځي.
+• کاروونکی د خپل براوزر معلومات بدلولای شي.
+• د مرکزي، څو کاروونکو database ځای نه نیسي.
+
+۸. Context API څه شی دی؟
+Context API د React یوه وسیله ده چې ګډ معلومات او functions بېلابېلو components ته رسوي، پرته له دې چې د هر منځګړي component له لارې props تېر شي.
+
+په دې پروژه کې SavedProvider دا معلومات شریکوي:
+• allOpportunities: د ټولو فرصتونو اوسنی state.
+• savedItems: د خوندي شوو فرصتونو اوسنی state.
+• toggleSave: خوندي کول یا له خوندي شوو څخه لرې کول.
+• addOpportunity: نوی فرصت زیاتول.
+• updateOpportunity: فرصت بدلول.
+• deleteOpportunity: فرصت لرې کول.
+
+د استعمال نمونه:
+const { savedItems, toggleSave } = useSaved();
+
+useSaved د پروژې خپل custom hook دی چې Context ته لاسرسی اسانه کوي. SavedProvider په app/layout.js کې د اپلیکیشن اړوند محتوا چاپېر کړی دی.
+
+دلته API د انټرنېټي backend API معنا نه لري؛ Context API د React دننه د معلوماتو شریکولو وسیله ده.
+
+۹. Context API ولې کارول شوی دی؟
+د دفاع ځواب: د فرصتونو صفحه، Saved صفحه او Dashboard ګډو معلوماتو ته اړتیا لري. Context API دا معلومات او functions له یوه Provider څخه ورته برابروي. دا کار د ډېرو منځګړو components له لارې د props تېرولو اړتیا کموي.
+
+۱۰. Context API او localStorage څه توپیر لري؟
+React state او Context: د روان اپلیکیشن ګډ معلومات اداره کوي او اړوند UI تازه کېږي.
+localStorage: معلومات په براوزر کې ساتي، څو له refresh وروسته بېرته ولوستل شي.
+
+یوازې localStorage ته لیکل په خپله React component بیا نه render کوي. له همدې امله ستا کوډ دواړه کارونه کوي:
+
+setSavedItems(updated);
+localStorage.setItem("kaaryab_saved", JSON.stringify(updated));
+
+لومړۍ کرښه React state بدلوي. دویمه کرښه معلومات د راتلونکي ځل لپاره په براوزر کې ساتي.
+
+که یوازې Context او in-memory state ولرو، د refresh پر مهال اوسنی state له منځه ځي او له لومړنیو ارزښتونو بیا پیلېږي، مګر دا چې له بلې ذخیرې بېرته راولوستل شي.
+
+۱۱. د Save بشپړ بهیر
+۱) کاروونکی د فرصت پر Save تڼۍ کلیک کوي.
+۲) toggleSave اجرا کېږي.
+۳) د some() له لارې ګوري چې د همدې id فرصت مخکې خوندي شوی که نه.
+۴) که موجود وي، filter() یې لرې کوي؛ که نه وي، لېست ته یې زیاتوي.
+۵) setSavedItems نوی لېست state ته ورکوي.
+۶) هغه components چې دا state کاروي، نوی حالت ښکاره کوي.
+۷) نوی لېست په localStorage کې ساتل کېږي.
+۸) له refresh وروسته useEffect ذخیره شوی لېست لولي او state ته یې ورکوي.
+
+د دفاع لنډ ځواب: Context د معلوماتو د شریکولو لپاره دی، او localStorage د refresh وروسته د معلوماتو د پاتې کېدو لپاره دی.
+
+۱۲. Validation څه شی دی؟
+Validation د تعریف شوو قواعدو مطابق د داخل شوو معلوماتو کتنه ده.
+
+د دفاع ځواب: ما React Hook Form د فورم د اداره کولو او Zod د validation لپاره کارولي دي. zodResolver دواړه سره نښلوي. که معلومات ناسم وي، errors ښکاره کېږي؛ که سم وي، onSubmit اجرا کېږي.
+
+مهمې برخې:
+• register: input له فورم سره نښلوي.
+• handleSubmit: validation ترسره کوي او معتبر معلومات onSubmit ته ورکوي.
+• errors: د validation خطاګانې ساتي.
+• zodResolver: د Zod قواعد له React Hook Form سره نښلوي.
+
+۱۳. د فرصت فورم کوم validation لري؟
+• title: لږ تر لږه ۳ توري.
+• organization: لږ تر لږه ۲ توري.
+• category: له ټاکل شوو ارزښتونو څخه یو.
+• location: لږ تر لږه ۲ توري.
+• type: Remote، On-site یا Hybrid.
+• deadline: خالي نه وي.
+• description: لږ تر لږه ۱۰ توري.
+• requirements: لږ تر لږه ۵ توري.
+• applyLink: د URL معتبر جوړښت.
+• tags: اختیاري متن.
+
+د کوډ ساده نمونه:
+const opportunitySchema = z.object({
+  title: z.string().min(3, "Title is too short"),
+  applyLink: z.string().url("Invalid URL")
+});
+
+useForm({ resolver: zodResolver(opportunitySchema) });
+
+سرچینه: app/add-opportunity/page.jsx
+
+۱۴. د validation محدودیتونه
+• د deadline موجوده قاعده یوازې خالي نه‌والی ګوري؛ راتلونکې نېټه نه تضمینوي.
+• معتبر URL د لینک رښتینولي یا فعالوالی نه تضمینوي.
+• د CV د phone قاعده یوازې خالي نه‌والی ګوري؛ بشپړ تلیفوني format نه ارزوي.
+• اوسنی validation په client کې دی. که backend جوړ شي، هلته هم د معلوماتو کتنه ضروري ده.
+• Validation د login یا د صلاحیتونو د کنټرول بدیل نه دی.
+
+۱۵. د پاسورډ لپاره کوم encryption کارول شوی؟
+د دفاع سم ځواب: په اوسني سیستم کې login، registration او د پاسورډ ذخیره نشته؛ نو د پاسورډ encryption یا hashing نه دی تطبیق شوی. Authentication د راتلونکي پرمختګ برخه ده.
+
+مفهومي توپیرونه:
+• Encryption: معلومات د کیلي په مرسته بېرته اصلي حالت ته راګرځېدای شي.
+• Hashing: یو طرفه محاسبه ده؛ د اصلي پاسورډ بېرته راایستل یې موخه نه ده.
+• Authentication: معلوموي چې کاروونکی څوک دی.
+• Authorization: معلوموي چې کاروونکی د کوم عمل اجازه لري.
+
+په اوسني کوډ کې د bcrypt، JWT یا بل login میکانېزم د کارولو ادعا مه کوه.
+
+۱۶. آیا Dashboard یوازې admin ته خلاص دی؟
+ځواب: په اوسني prototype کې د admin او عادي کاروونکي لپاره جلا صلاحیتونه نه دي جوړ شوي. Dashboard د محلي معلوماتو د مدیریت لپاره دی. د جلا Dashboard صفحې موجودیت په خپله امنیتي اجازه نه جوړوي.
+
+۱۷. CRUD څه دی او څنګه کار کوي؟
+Create: addOpportunity نوی object د فرصتونو array ته زیاتوي.
+Read: معلومات له state یا لومړني data فایل څخه لوستل او ښودل کېږي.
+Update: updateOpportunity د id له مخې د map() په مرسته فرصت بدلوي.
+Delete: deleteOpportunity د filter() په مرسته فرصت لرې کوي او له savedItems څخه یې هم وباسي.
+
+د بدلون پر مهال اړوند state او localStorage تازه کېږي. دا عملیات محلي دي؛ مرکزي سرور ته نه لېږل کېږي.
+
+۱۸. Search او filter څنګه کار کوي؟
+ځواب: لټون د عنوان او ادارې په نوم کې کېږي. toLowerCase متن کوچنیو تورو ته اړوي او includes د متن موجودیت ګوري. category او type هم د filter په مرسته ارزول کېږي.
+
+وروستی شرط:
+matchesSearch && matchesCategory && matchesType
+
+یعنې نتیجه باید ټول ټاکل شوي شرطونه پوره کړي. د فرصتونو په اوسني مخ کې د موقعیت او deadline مستقل فلټرونه نه شته.
+
+۱۹. Routing او Dynamic Route
+Next.js App Router د فولډرونو پر بنسټ مسیرونه جوړوي.
+app/saved/page.jsx → /saved
+app/dashboard/page.jsx → /dashboard
+app/opportunities/[id]/page.jsx → /opportunities/1 او ورته مسیرونه
+
+[id] متغیره برخه ده. په details صفحه کې use(paramsPromise) params لولي او find() د id مطابق فرصت پیدا کوي.
+
+موجود محدودیت: details صفحه لومړني opportunities فایل ته ګوري؛ د Context نوي یا بدل شوي معلومات نه لولي.
+
+۲۰. useState، useEffect او use client
+• useState د component بدلېدونکي معلومات ساتي، لکه search او savedItems.
+• useEffect په دې پروژه کې د mount وروسته له localStorage څخه معلومات لولي.
+• "use client" د client component حد ټاکي، څو تعاملي React امکانات وکارول شي.
+
+د دفاع ځواب: د فورمونو، کلیکونو او state لپاره مې client components کارولي دي. د براوزر localStorage په useEffect کې لولم.
+
+۲۱. CV څنګه PDF کېږي؟
+ځواب: د CV فورم معلومات لومړی validate کېږي. بیا ResumeDocument ته ورکول کېږي. @react-pdf/renderer سند جوړوي، toBlob یې PDF Blob ته اړوي، او URL.createObjectURL د download لپاره موقتي URL جوړوي.
+
+بهیر: Form → Validation → ResumeDocument → PDF Blob → Download
+
+useFieldArray د تعلیم، تجربې، جایزو، سندونو او references د تکرارېدونکو برخو د زیاتولو او لرې کولو لپاره کارول شوی دی.
+سرچینه: app/cv-builder/page.jsx
+
+۲۲. Dashboard شمېرې څنګه جوړېږي؟
+د فرصتونو array فلټر کېږي او د هرې ډلې length اخیستل کېږي. مثلاً د Job کټګورۍ شمېر. Recharts همدا محاسبه شوې شمېرې په چارټ کې ښيي.
+
+دا د محلي state شمېرې دي؛ د سرور د کاروونکو د ژوندیو فعالیتونو analytics نه دي. د Total Active اوسنی شمېر ټول فرصتونه حسابوي او د پای نېټې له مخې یې نه فلټر کوي.
+
+۲۳. Dark Mode څنګه کار کوي؟
+ThemeContext د darkMode state اداره کوي. د HTML عنصر ته dark class زیاتېږي یا ترې لرې کېږي. انتخاب د theme په نوم په localStorage کې ساتل کېږي او په بل ځل پرانیستلو کې بېرته لوستل کېږي.
+سرچینه: context/ThemeContext.jsx
+
+۲۴. Contact فورم پیغام رښتیا لېږي؟
+ځواب: په اوسني کوډ کې فورم یوازې د بریالیتوب پیغام ښکاره کوي او وروسته fields پاکوي. د ایمیل یا backend د لېږلو اتصال نه لري.
+سرچینه: app/contact/page.jsx
+
+۲۵. د دفاع او demo مخکې د پېژندلو وړ نیمګړتیاوې
+دا موارد د کوډ په کتنه کې لیدل شوي؛ په دې کار کې نه دي اصلاح شوي او اجرايي ازموینه یې نه ده شوې:
+• د نوي فرصت لپاره id نه تولیدېږي.
+• details صفحه د Context پر ځای یوازې لومړني data فایل ته ګوري.
+• Dashboard د نېټې په محاسبه کې ثابته 2026-07-12 نېټه کاروي.
+• کله چې نږدې ختمېدونکي فرصتونه نه وي، Dashboard لومړني درې فرصتونه د بدیل په توګه اخلي؛ دا حتمي نه ده چې نېټه یې نږدې وي.
+• Contact فورم حقیقي ایمیل نه لېږي.
+• د لومړنیو فرصتونو حذف کېدل د بیا load پر مهال د data فایل او ذخیرې د merge له امله بېرته راګرځېدای شي.
+• لومړني معلومات نمونه‌يي دي؛ د ټولو فرصتونو د حقیقي یا تایید شوي والي ادعا سمه نه ده.
+
+۲۶. راتلونکي پرمختګونه څنګه بیان کړم؟
+د دفاع ځواب: راتلونکې نسخه به مرکزي database، backend API، authentication، د کاروونکو صلاحیتونه، د فرصتونو د تایید بهیر او حقیقي پیغام‌لېږنه ولري. له دې سره به موجودې نیمګړتیاوې اصلاح او د مهمو کاري بهیرونو ازموینې ترسره شي.
+
+۲۷. د تمرین پوښتنې
+۱) پروژه دې کومه ستونزه حل کوي؟
+۲) React او Next.js په دې پروژه کې څه دندې لري؟
+۳) localStorage او database څه توپیر لري؟
+۴) ولې دې Context او localStorage دواړه کارولي؟
+۵) که localStorage نه وي، له refresh وروسته state څه کېږي؟
+۶) JSON.stringify او JSON.parse څه کوي؟
+۷) ولې JSON.stringify encryption نه دی؟
+۸) د Save تڼۍ له کلیک وروسته ټول بهیر تشریح کړه.
+۹) Zod او React Hook Form څه جلا دندې لري؟
+۱۰) آیا URL validation د لینک رښتینولي ثابتوي؟
+۱۱) Authentication او Authorization څه توپیر لري؟
+۱۲) د پاسورډ د امنیت په اړه ستا د اوسني سیستم سم ځواب څه دی؟
+۱۳) CRUD څنګه تطبیق شوی؟
+۱۴) د نوي فرصت id ولې مهم دی؟
+۱۵) CV څنګه PDF ته بدلېږي؟
+۱۶) کوم امکانات اوس شته او کوم راتلونکي پلانونه دي؟
+
+د ځواب ویلو طریقه: لومړی مفهوم په یوه جمله تعریف کړه، بیا یې په خپلې پروژې کې مثال ورکړه، او که محدودیت ولري، په روښانه ډول یې بیان کړه.
+
+د دفاع لپاره د یادولو لنډ ځواب
+ما Context API د پاڼو ترمنځ د ګډ state د شریکولو لپاره کارولی دی. localStorage مې د دې لپاره کارولی چې معلومات له refresh وروسته هم پاتې شي. کله چې فرصت خوندي کېږي، state او localStorage دواړه تازه کېږي. د فورمونو لپاره React Hook Form او Zod کاروم. په اوسني prototype کې مرکزي database، login او د پاسورډ hashing نشته.

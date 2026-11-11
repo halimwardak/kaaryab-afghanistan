@@ -1,0 +1,36 @@
+{
+  "name": "kaaryab-afghanistan",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/dev.cjs",
+    "frontend:dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "backend:dev": "npm --prefix backend run dev",
+    "test:backend": "npm --prefix backend test",
+    "test:i18n": "node --test tests/i18n.test.mjs"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.4.0",
+    "@next/swc-win32-x64-msvc": "^16.3.6",
+    "@react-pdf/renderer": "^4.5.1",
+    "i18next": "^27.0.1",
+    "jspdf": "^4.2.1",
+    "lucide-react": "^1.24.0",
+    "next": "16.2.10",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-hook-form": "^7.81.0",
+    "react-i18next": "^18.0.0",
+    "recharts": "^3.9.2",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.10",
+    "tailwindcss": "^4"
+  }
+}

@@ -1,0 +1,16 @@
+node_modules/
+.next/
+out/
+build/
+.env*.local
+node_modules
+.env
+.env.*
+!.env.example
+backend/.postgres/
+backend/.backups/
+backend/.test-postgres/
+backend/generated/
+*.log
+.source-review/
+release/
