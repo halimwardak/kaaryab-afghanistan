@@ -76,3 +76,6 @@ export function createApp() {
   });
   return app;
 }
+
+// Vercel loads this module directly as the Express service entrypoint.
+export default createApp();
