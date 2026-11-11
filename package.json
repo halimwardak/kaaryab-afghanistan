@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
-    "@next/swc-win32-x64-msvc": "^16.3.6",
     "@react-pdf/renderer": "^4.5.1",
     "i18next": "^27.0.1",
     "jspdf": "^4.2.1",
