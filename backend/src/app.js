@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import { ZodError } from 'zod';
 import { db } from './config/db.js';
-import { env, origin } from './config/env.js';
+import { env, isTrustedOrigin } from './config/env.js';
 import { optionalAuth } from './middleware/auth.js';
 import { HttpError } from './utils/http.js';
 import { contact } from './validators/index.js';
@@ -35,15 +35,15 @@ export function createApp() {
     next();
   });
   app.use(helmet());
-  app.use(cors({ origin: (value, done) => done(null, !value || value === origin), credentials: true }));
+  app.use(cors({ origin: (value, done) => done(null, !value || isTrustedOrigin(value)), credentials: true }));
   app.use('/api', rateLimit({ windowMs: 15 * 60000, limit: 600, standardHeaders: 'draft-8', legacyHeaders: false, message: { error: 'Too many requests. Try again later.' } }));
   app.use(express.json({ limit: '1mb' }));
   app.use(cookieParser());
   app.use('/api', (req, res, next) => {
     res.set('Cache-Control', 'no-store');
     if (!['GET', 'HEAD', 'OPTIONS'].includes(req.method)) {
-      // Mandatory custom header + exact Origin validation protects cookie-authenticated writes.
-      if (req.get('X-KaarYab-Request') !== '1' || (req.get('origin') && req.get('origin') !== origin)) throw new HttpError(403, 'Request origin is not allowed.');
+      // Mandatory custom header + explicit Origin allowlist protects cookie-authenticated writes.
+      if (req.get('X-KaarYab-Request') !== '1' || (req.get('origin') && !isTrustedOrigin(req.get('origin')))) throw new HttpError(403, 'Request origin is not allowed.');
       if (req.body && !req.is('application/json')) throw new HttpError(415, 'Use application/json.');
     }
     next();

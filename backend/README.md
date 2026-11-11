@@ -128,6 +128,7 @@ The existing Google Inter font is downloaded during the Next.js build, so the bu
 | NODE_ENV | backend | development, test or production |
 | HOST / PORT | backend | Defaults 127.0.0.1 / 4000; set a container bind address when deploying behind your proxy |
 | FRONTEND_URL | backend | Exact frontend origin and canonical reset link base; HTTPS required in production |
+| TRUSTED_ORIGINS | backend | Optional comma-separated exact additional origins for reviewed aliases/previews; HTTPS required in production |
 | TRUST_PROXY | backend | Trusted reverse-proxy hop count, default 0; configure to match your actual network |
 | SMTP_HOST / SMTP_PORT | backend | Optional SMTP server and port (default 587) |
 | SMTP_SECURE | backend | `true` for implicit TLS, typically port 465 |
@@ -140,6 +141,41 @@ Prefer same-origin proxying for cookies. Separate-site hosting needs an intentio
 Password reset uses a 32-byte random token, stores only its SHA-256 hash, expires it in 30 minutes, and consumes it once in a transaction. Reset links use the configured frontend URL, not an untrusted Host header. Raw tokens are never logged or returned by the API. SMTP failure removes the generated token and returns the same generic public response. Configure and verify SMTP before offering email recovery publicly.
 
 ## Architecture and schema
+### Vercel Login/Register origin configuration
+
+Authentication uses Express, bcrypt and database-backed JWT session cookies. CORS and
+the `/api` write guard share an explicit origin allowlist. `FRONTEND_URL` is always
+trusted and remains the canonical password-reset URL. `TRUSTED_ORIGINS` adds exact
+reviewed aliases, separated by commas. For example:
+
+```dotenv
+FRONTEND_URL=https://kaaryab-afghanistan-gamma.vercel.app
+TRUSTED_ORIGINS=https://your-reviewed-preview.vercel.app
+NEXT_PUBLIC_API_URL=/api
+```
+
+Replace the example preview address with an actual approved deployment or branch
+alias, or leave `TRUSTED_ORIGINS` empty. Configure these for the appropriate Vercel
+Production/Preview environment and make them available to the backend service.
+Production and preview domains differ; neither `VERCEL_URL` nor
+`VERCEL_PROJECT_PRODUCTION_URL` is automatically trusted. Never allow `*.vercel.app`
+or infer trust from request Host/forwarded headers. Origin entries must contain only
+scheme, hostname and optional port (a trailing slash is accepted); production requires HTTPS.
+
+Keep browser API requests on `/api`: `vercel.json` routes them to the backend service.
+The Next.js `BACKEND_URL` rewrite is for separate/local hosting, defaults to localhost,
+and is not an origin allowlist. Do not set the browser API URL to another deployment
+to work around a 403; host-only cookies must stay on the visited frontend origin.
+Keep `DATABASE_URL`, a private random `JWT_SECRET` of at least 32 characters, and
+`NODE_ENV=production` configured. Do not rotate the secret or modify the database to
+resolve an origin mismatch.
+
+After pushing the fix and saving environment changes, redeploy the latest commit.
+Visit the exact configured production domain, check `/api/health`, and test registration,
+login and logout. Test approved previews separately in the Preview environment; use
+a separate preview database/secret. Unlisted origins must continue to receive 403 for
+writes, and a trusted browser request must still include `X-KaarYab-Request: 1`.
+
 
 ```text
 Existing React pages -> lib/api.js -> Next /api rewrite -> Express -> Prisma -> PostgreSQL
